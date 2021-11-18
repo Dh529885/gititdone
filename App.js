@@ -6,15 +6,31 @@ import {
   View,
   TouchableOpacity,
   FlatList,
+  Modal,
 } from "react-native";
 import colors from "./Colors";
 import tempData from "./tempData";
 import TodoList from "./components/TodoList";
+import AddListModal from "./components/AddListModal";
 
 export default class App extends React.Component {
+  state = {
+    addTodoVisible: false,
+  };
+
+  toggleAddTodoModal() {
+    this.setState({ addTodoVisible: !this.state.addTodoVisible });
+  }
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          animationType="slide"
+          visible={this.state.addTodoVisible}
+          onRequestClose={() => this.toggleAddTodoModal()}
+        >
+          <AddListModal closeModal={() => this.toggleAddTodoModal()} />
+        </Modal>
         <View style={{ flexDirection: "row" }}>
           <View style={styles.divider} />
           <Text style={styles.title}>
@@ -25,12 +41,12 @@ export default class App extends React.Component {
           <View style={styles.divider} />
         </View>
         <View style={{ marginVertical: 48 }}>
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.addList}>
             <Icon
               name="plus"
               type="font-awesome"
               color={colors.gold}
-              onPress={() => console.log("hello")}
+              onPress={() => this.toggleAddTodoModal()}
             />
           </TouchableOpacity>
           <Text style={styles.add}>Add List</Text>
