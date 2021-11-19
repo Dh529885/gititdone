@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
+  Image,
 } from "react-native";
 import colors from "./Colors";
 import tempData from "./tempData";
 import TodoList from "./components/TodoList";
 import AddListModal from "./components/AddListModal";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 export default class App extends React.Component {
   state = {
@@ -21,6 +23,10 @@ export default class App extends React.Component {
   toggleAddTodoModal() {
     this.setState({ addTodoVisible: !this.state.addTodoVisible });
   }
+
+  renderList = (list) => {
+    return <TodoList list={list} />;
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -31,13 +37,15 @@ export default class App extends React.Component {
         >
           <AddListModal closeModal={() => this.toggleAddTodoModal()} />
         </Modal>
+
         <View style={{ flexDirection: "row" }}>
           <View style={styles.divider} />
-          <Text style={styles.title}>
-            GET
-            <Text style={{ fontWeight: "800", color: colors.gold }}>IT</Text>
-            <Text style={{ fontWeight: "800", color: colors.white }}>DONE</Text>
-          </Text>
+
+          <Image
+            style={styles.title}
+            source={require("./assets/gitdonelogowd.png")}
+          />
+
           <View style={styles.divider} />
         </View>
         <View style={{ marginVertical: 48 }}>
@@ -58,9 +66,16 @@ export default class App extends React.Component {
             keyExtractor={(item) => item.name}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => <TodoList list={item} />}
+            renderItem={({ item }) => this.renderList(item)}
           />
         </View>
+        <Image
+          style={{ width: 100, height: 100, marginTop: 50, marginBottom: 0 }}
+          source={require("./assets/logo.png")}
+        />
+        <Text style={{ color: Colors.white, fontSize: 10 }}>
+          Made For Developers
+        </Text>
       </View>
     );
   }
@@ -80,9 +95,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   title: {
-    fontSize: 38,
-    fontWeight: "800",
-    color: colors.white,
+    width: 250,
+    height: 80,
     paddingHorizontal: 54,
   },
   add: {
