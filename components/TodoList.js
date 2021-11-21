@@ -5,7 +5,7 @@ import TodoModal from "./TodoModal";
 
 export default class TodoList extends React.Component {
   state = {
-    showListVisible: false,
+    showListVisible: false
   };
 
   toggleListModal() {
@@ -14,19 +14,23 @@ export default class TodoList extends React.Component {
 
   render() {
     const list = this.props.list;
-    const completedCount = list.todos.filter((todo) => todo.completed).length;
-    const finishedSubTitle = list.todos.length - completedCount;
+
+    const completedCount = list.todos.filter(todo => todo.completed).length;
+    const remainingCount = list.todos.length - completedCount;
 
     return (
       <View>
         <Modal
-          animationType="fade"
+          animationType="slide"
           visible={this.state.showListVisible}
           onRequestClose={() => this.toggleListModal()}
         >
-          <TodoModal list={list} closeModal={() => this.toggleListModal()} />
+          <TodoModal
+            list={list}
+            closeModal={() => this.toggleListModal()}
+            updateList={this.props.updateList}
+          />
         </Modal>
-
         <TouchableOpacity
           style={[styles.listContainer, { backgroundColor: list.color }]}
           onPress={() => this.toggleListModal()}
@@ -34,13 +38,16 @@ export default class TodoList extends React.Component {
           <Text style={styles.listTitle} numberOfLines={1}>
             {list.name}
           </Text>
-          <View style={{ alignItems: "center" }}>
-            <Text style={styles.count}>{completedCount}</Text>
-            <Text style={styles.subtitle}>Left</Text>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={styles.count}>{finishedSubTitle}</Text>
-            <Text style={styles.subtitle}>Finished</Text>
+
+          <View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.count}>{remainingCount}</Text>
+              <Text style={styles.subtitle}>Remaining</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.count}>{completedCount}</Text>
+              <Text style={styles.subtitle}>Completed</Text>
+            </View>
           </View>
         </TouchableOpacity>
       </View>
